@@ -18,8 +18,8 @@ import java.sql.Statement;
 
 public class RegistrarVenta {
     
-    private ConexionMysql conn;
-    private double costoTotal;
+    private final ConexionMysql conn;
+    private final double costoTotal;
     
     public RegistrarVenta(Double costoTotal){
         
