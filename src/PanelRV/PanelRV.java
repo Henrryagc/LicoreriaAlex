@@ -9,6 +9,7 @@ package PanelRV;
 import Option.SiNoDialog;
 import java.awt.Font;
 import java.text.DecimalFormat;
+import java.util.Arrays;
 import licoreriawilma.Producto;
 import licoreriawilma.TipoProducto;
 
@@ -91,7 +92,6 @@ public class PanelRV extends javax.swing.JPanel {
         jLabel1.setFont(new java.awt.Font("Courier 10 Pitch", 1, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(51, 51, 51));
         jLabel1.setText("REGISTRO DE VENTA DE PRODUCTOS");
-        jLabel1.setBorder(null);
 
         jLabel2.setFont(new java.awt.Font("Courier 10 Pitch", 1, 18)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
@@ -105,7 +105,6 @@ public class PanelRV extends javax.swing.JPanel {
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Precio del producto:");
 
-        jComboBox1.setBackground(new java.awt.Color(255, 255, 255));
         jComboBox1.setFont(new java.awt.Font("Courier 10 Pitch", 1, 16)); // NOI18N
         jComboBox1.setForeground(new java.awt.Color(0, 102, 204));
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Licores" }));
@@ -116,7 +115,6 @@ public class PanelRV extends javax.swing.JPanel {
             }
         });
 
-        jComboBox2.setBackground(new java.awt.Color(255, 255, 255));
         jComboBox2.setFont(new java.awt.Font("Courier 10 Pitch", 1, 16)); // NOI18N
         jComboBox2.setForeground(new java.awt.Color(0, 102, 204));
         jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ruskaya" }));
@@ -171,7 +169,6 @@ public class PanelRV extends javax.swing.JPanel {
                 "NUMERO", "PRODUCTO", "TIPO PRODUCTO", "PRECIO", "CANTIDAD", "SUBTOTAL"
             }
         ));
-        jTable1.setRowHeight(20);
         jTable1.setSelectionBackground(new java.awt.Color(255, 255, 255));
         jTable1.setSelectionForeground(new java.awt.Color(204, 0, 102));
         jTable1.setShowGrid(true);
@@ -485,7 +482,7 @@ public class PanelRV extends javax.swing.JPanel {
         //jComboBox1.setModel(aModel);
 
         produc = npro.buscarProducto(true);//buscamos los registros de la clase Producto, enviamos true para desconectar la conexion
-
+            System.out.println(""+Arrays.toString(produc));
         int numeroCombo = jComboBox2.getSelectedIndex();//recuperamos el indice del NOMBRE seleccionado en el combobox
         jLabel7.setText(String.valueOf(produc[numeroCombo][2]));//enviamos el STOCK del producto seleccionado en el combobox
         jTextField1.setText(String.valueOf(produc[numeroCombo][3]));//enviamos el precio del producto seleccionado en el combobox

@@ -8,7 +8,6 @@ package licoreriawilma;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import Conexion.ConexionMysql;
 import Conexion.SqliteConnection;
 import PanelBP.BuscarProducto;
 import java.util.Arrays;
@@ -19,21 +18,17 @@ public class Producto {
     String nomPro;
     int stock;
     double precio;
-    int idTipoPro;
-
-    ConexionMysql conn;
+    int idTipoPro;    
     private final SqliteConnection connection = SqliteConnection.getInstance();
 
-    public Producto() {
-        conn = new ConexionMysql();
+    public Producto() {       
     }
 
     public Producto(String nomPro, int stock, double precio, int idTipoPro) {
         this.nomPro = nomPro;
         this.stock = stock;
         this.precio = precio;
-        this.idTipoPro = idTipoPro;
-        conn = new ConexionMysql();
+        this.idTipoPro = idTipoPro;        
     }
 
     public void Guardar() {
@@ -41,9 +36,9 @@ public class Producto {
         String sql = "INSERT INTO Producto(idProducto,nombreProducto,stock,precio,idTipoProducto) VALUES(0,'" + nomPro + "','" + stock + "','" + precio + "','" + idTipoPro + "')";
 
         try {
-            PreparedStatement pstm = conn.getConnection().prepareStatement(sql);
+            PreparedStatement pstm = connection.connect().prepareStatement(sql);
             pstm.executeUpdate();
-            conn.Desconectar();
+            connection.disconnect();
         } catch (SQLException e) {
             System.out.println("Guardar Produc: <-- " + e);
         }
@@ -59,7 +54,7 @@ public class Producto {
                 + "WHERE TipoProducto.idTipoProducto='" + idTipoPro + "'";
         Object[][] regs = new Object[count][4];
         try {
-            PreparedStatement pstm = conn.getConnection().prepareStatement(sql);
+            PreparedStatement pstm = connection.connect().prepareStatement(sql);
             ResultSet res = pstm.executeQuery();
             //regs[0][0]=0;
             int c = 0;
@@ -75,7 +70,7 @@ public class Producto {
                 System.out.println(Arrays.deepToString(reg));
             }
             if (desconectar) {
-                conn.Desconectar();
+                connection.disconnect();
             }
         } catch (SQLException e) {
             System.out.println("Buscar Producto : " + e);
@@ -94,7 +89,7 @@ public class Producto {
         String[] regs = new String[total];
 
         try {
-            PreparedStatement pstm = conn.getConnection().prepareStatement(sql);
+            PreparedStatement pstm = connection.connect().prepareStatement(sql);
             ResultSet res = pstm.executeQuery();
 
             int c = 0;
@@ -115,7 +110,7 @@ public class Producto {
         Object[][] prods = new Object[totalPro][2];
         String sql = "SELECT nombreProducto, stock FROM Producto";
         try {
-            PreparedStatement pstm = conn.getConnection().prepareStatement(sql);
+            PreparedStatement pstm = connection.connect().prepareStatement(sql);
             ResultSet res = pstm.executeQuery();
             int c = 0;
             while (res.next()) {
@@ -136,7 +131,7 @@ public class Producto {
                 + "Producto INNER JOIN TipoProducto ON Producto.idTipoProducto = TipoProducto.idTipoProducto";
         Object[][] regs = new Object[count][5];
         try {
-            PreparedStatement pstm = conn.getConnection().prepareStatement(sql);
+            PreparedStatement pstm = connection.connect().prepareStatement(sql);
             ResultSet res = pstm.executeQuery();
 
             regs[0][0] = 0;
@@ -192,7 +187,7 @@ public class Producto {
         var buscarProductoList = new LinkedList<BuscarProducto>();        
 
         try {
-            PreparedStatement pstm = conn.getConnection().prepareStatement(sql);
+            PreparedStatement pstm = connection.connect().prepareStatement(sql);
             ResultSet res = pstm.executeQuery();            
             while (res.next()) {
                 buscarProductoList.add(new BuscarProducto(
@@ -204,7 +199,7 @@ public class Producto {
             }
 
             if (desactivar) {
-                conn.Desconectar();
+                connection.disconnect();
             }
 
         } catch (SQLException e) {
@@ -220,7 +215,7 @@ public class Producto {
         String sql = "SELECT idProducto FROM Producto WHERE nombreProducto='" + nombrePro + "'";
 
         try {
-            PreparedStatement pstm = conn.getConnection().prepareStatement(sql);
+            PreparedStatement pstm = connection.connect().prepareStatement(sql);
             ResultSet res = pstm.executeQuery();
             if (res.next()) {
                 idPro = res.getInt("idProducto");
@@ -229,7 +224,7 @@ public class Producto {
                 System.out.println("No hay nada");
             }
             if (desconectar) {
-                conn.Desconectar();
+                connection.disconnect();
             }
         } catch (SQLException e) {
             System.out.println("IdPro buscar error");
@@ -255,7 +250,7 @@ public class Producto {
                 break;
         }
         try {
-            PreparedStatement pstm = conn.getConnection().prepareStatement(sql);
+            PreparedStatement pstm = connection.connect().prepareStatement(sql);
             pstm.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e);
@@ -265,10 +260,10 @@ public class Producto {
     public void DeletePro(int idDelete, boolean desactivar) {
         String sql = "DELETE FROM Producto WHERE idProducto='" + idDelete + "'";
         try {
-            PreparedStatement pstm = conn.getConnection().prepareStatement(sql);
+            PreparedStatement pstm = connection.connect().prepareStatement(sql);
             pstm.executeUpdate();
             if (desactivar) {
-                conn.Desconectar();
+                connection.disconnect();
             }
         } catch (SQLException e) {
             System.out.println(e);
@@ -279,10 +274,10 @@ public class Producto {
         String sql = "UPDATE Producto SET stock='" + can + "' WHERE idProducto='" + id + "'";
 
         try {
-            PreparedStatement pstm = conn.getConnection().prepareStatement(sql);
+            PreparedStatement pstm = connection.connect().prepareStatement(sql);
             pstm.executeUpdate();
             if (desconectar) {
-                conn.Desconectar();
+                connection.disconnect();
             }
 
         } catch (SQLException e) {
@@ -295,14 +290,14 @@ public class Producto {
         int count = 0;
         String sql2 = "SELECT COUNT(*) FROM Producto";
         try {
-            PreparedStatement pstm = conn.getConnection().prepareStatement(sql2);
+            PreparedStatement pstm = connection.connect().prepareStatement(sql2);
             ResultSet res = pstm.executeQuery();
 
             if (res.next()) {
                 count = res.getInt(1);
             }
             System.out.println("Cantidad de registros P: " + count);
-            //conn.Desconectar(); //esto desconecta la conexion y no funciona la consulta en el siguiente metodo
+            //connection.disconnect(); //esto desconecta la conexion y no funciona la consulta en el siguiente metodo
         } catch (SQLException e) {
             System.out.println("ContarTotal");
             System.out.println(e);
@@ -318,7 +313,7 @@ public class Producto {
                 + "ON Producto.idTipoProducto = TipoProducto.idTipoProducto "
                 + "WHERE TipoProducto.idTipoProducto ='" + idTipoPro + "'";
         try {
-            PreparedStatement pstm = conn.getConnection().prepareStatement(sql);
+            PreparedStatement pstm = connection.connect().prepareStatement(sql);
             ResultSet res = pstm.executeQuery();
             if (res.next()) {
                 iid = res.getInt(1);

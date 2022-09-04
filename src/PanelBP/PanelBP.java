@@ -1,15 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package PanelBP;
 
 
 import Option.SiNoDialog;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import javax.swing.JOptionPane;
 import licoreriawilma.Producto;
 import licoreriawilma.TipoProducto;
 
@@ -81,7 +74,7 @@ public class PanelBP extends javax.swing.JPanel {
         setPreferredSize(new java.awt.Dimension(920, 560));
 
         jLabel1.setFont(new java.awt.Font("Courier 10 Pitch", 1, 24)); // NOI18N
-        jLabel1.setText("BUSCAR PRODUCTOS PARA HACER ALGUNOS AJUSTES");
+        jLabel1.setText("BUSCAR PRODUCTOS, ACTUALIZAR, ETC.");
         jLabel1.setToolTipText("");
 
         jLabel2.setFont(new java.awt.Font("Courier 10 Pitch", 1, 16)); // NOI18N
@@ -96,7 +89,7 @@ public class PanelBP extends javax.swing.JPanel {
         jButton1.setFont(new java.awt.Font("Courier 10 Pitch", 1, 14)); // NOI18N
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/searchB-25.png"))); // NOI18N
         jButton1.setText("BUSCAR PRODUCTO");
-        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jButton1MouseClicked(evt);
@@ -120,7 +113,6 @@ public class PanelBP extends javax.swing.JPanel {
                 "NUMERO", "PRODUCTO", "TIPO PRODUCTO", "STOCK", "PRECIO"
             }
         ));
-        jTable1.setRowHeight(20);
         jTable1.setShowGrid(true);
         jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -179,7 +171,7 @@ public class PanelBP extends javax.swing.JPanel {
         jButton2.setBackground(new java.awt.Color(51, 204, 0));
         jButton2.setFont(new java.awt.Font("Courier 10 Pitch", 1, 22)); // NOI18N
         jButton2.setText("ACTUALIZAR");
-        jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jButton2MouseClicked(evt);
@@ -189,7 +181,7 @@ public class PanelBP extends javax.swing.JPanel {
         jButton3.setBackground(new java.awt.Color(255, 51, 51));
         jButton3.setFont(new java.awt.Font("Courier 10 Pitch", 1, 22)); // NOI18N
         jButton3.setText("ELIMINAR");
-        jButton3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton3.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jButton3.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jButton3MouseClicked(evt);
@@ -371,7 +363,7 @@ public class PanelBP extends javax.swing.JPanel {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 160, Short.MAX_VALUE)
+                .addGap(0, 286, Short.MAX_VALUE)
                 .addComponent(jLabel1)
                 .addGap(158, 158, 158))
             .addGroup(layout.createSequentialGroup()
@@ -493,7 +485,7 @@ public class PanelBP extends javax.swing.JPanel {
             case 1:
                 System.out.println("Se eligio la opcion SI");
                 //Funcion para eliminar el registro
-                DeleteRegistry(); // Eliminar registro
+                DeleteRecord(); // Eliminar registro
                 break;
         }
         
@@ -529,16 +521,24 @@ public class PanelBP extends javax.swing.JPanel {
         
         //FillTable(); //Aqui cargamos la tabla para visualizar los datos
         
-        Producto pro = new Producto("",0,0.0,0);
-        obj = pro.listaSearch(true, nomSearch, numero);
+        Producto pro = new Producto();
+        var buscarProducto = pro.listaSearch(true, nomSearch, numero);        
+        obj = new Object[buscarProducto.size()][buscarProducto.size() + 2];
+                
+        for (int i = 0; i < buscarProducto.size(); i++) {
+            obj[i][0] = i + 1;
+            obj[i][1] = buscarProducto.get(i).nombreProducto;
+            obj[i][2] = buscarProducto.get(i).nombreTipoProducto;
+            obj[i][3] = buscarProducto.get(i).stock;            
+            obj[i][4] = buscarProducto.get(i).precio;            
+        }
         
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             obj,
             new String [] {
                 "Numero", "Producto", "Tipo Producto", "Stock", "Precio"
             }
-        ));
-        
+        ));        
     }
     
     private void ActualizarDatos(){
@@ -584,7 +584,7 @@ public class PanelBP extends javax.swing.JPanel {
         //jTable1.setValueAt(pre, ERROR, fila);
     }
     
-    private void DeleteRegistry(){
+    private void DeleteRecord(){
         //Recuperamos el nombre producto
         String nomPro = String.valueOf(obj[fila][1]);
         Producto pro = new Producto("",0,0.0,0);
@@ -593,9 +593,7 @@ public class PanelBP extends javax.swing.JPanel {
         System.out.println("Producto id a eliminar: "+id);
         pro.DeletePro(id,true);
     }
-    
-
-    
+        
     private void Limpiar(){
         jTextField1.setText("");
         //jTextField2.setText("");
@@ -604,6 +602,7 @@ public class PanelBP extends javax.swing.JPanel {
         jTextField5.setText("");
         jTextField6.setText("");
     }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton jButton1;
@@ -642,8 +641,7 @@ public class PanelBP extends javax.swing.JPanel {
          d.SetTextOption( message);  
          d.setVisible(true);
          int a = d.getReturnStatus();
-         System.out.println("option " + a);
-         
+         System.out.println("option " + a);        
          return a;
     }
 }
