@@ -8,7 +8,7 @@ package licoreriawilma;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import Conexion.SqliteConnection;
+import db.Conexion.SqliteConnection;
 import PanelBP.BuscarProducto;
 import java.util.Arrays;
 import java.util.LinkedList;

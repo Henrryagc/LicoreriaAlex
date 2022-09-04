@@ -1,6 +1,7 @@
 
-package Conexion;
+package db.Conexion;
 
+import db.utils.CreateTables;
 import java.sql.Connection;
 import java.sql.DriverManager; 
 import java.sql.SQLException;
@@ -33,6 +34,8 @@ public class SqliteConnection {
             connection = DriverManager.getConnection(url);
             
             System.out.println("Connection to SQLite has been established.");
+            // var createSqliteTables = new CreateTables();
+            // createSqliteTables.createTablesSqite(connection);
             
         } catch (SQLException e) {
             System.out.println(e.getMessage());

@@ -46,17 +46,16 @@ public class jfmrLicoreria extends javax.swing.JFrame {
     private JFreeChart chart_1;
     private JFreeChart chart_2;
     
-    
-    
-    public jfmrLicoreria() {
+    public jfmrLicoreria() {       
+        
         initComponents();
+         
         jTabbedPane1.setVisible(false);
         // Inicializamos las variables boleanas antes definidas 
         presionado_1 = false;
         presionado_2 = false;
         presionado_3 = false;
-        presionado_4 = false;
-
+        presionado_4 = false;              
     }
 
     /**

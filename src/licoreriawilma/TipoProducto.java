@@ -6,7 +6,7 @@ package licoreriawilma;
  * @author henrryagc
  */
 
-import Conexion.SqliteConnection;
+import db.Conexion.SqliteConnection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
