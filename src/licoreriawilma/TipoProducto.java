@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package licoreriawilma;
 
 /**
@@ -10,7 +6,7 @@ package licoreriawilma;
  * @author henrryagc
  */
 
-import Conexion.ConexionMysql;
+import db.Conexion.SqliteConnection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,17 +16,16 @@ public class TipoProducto {
     
     int id;
     String ntproducto;
-    ConexionMysql conn;
+    private final SqliteConnection connection = SqliteConnection.getInstance();
+    public TipoProducto() {
+    }
     
     public TipoProducto(int id){
         this.id = id;
         
-        conn= new ConexionMysql();
     }
     public TipoProducto(String ntproducto){
         this.ntproducto = ntproducto;
-        
-        conn= new ConexionMysql();
     }
     
     
@@ -40,14 +35,14 @@ public class TipoProducto {
                 //"INSERT INTO TipoProducto VALUES(0,'"+ntproducto+"','current_timestamp()')";
         
         try {
-            PreparedStatement pstm = conn.getConnection().prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);            
+            PreparedStatement pstm = connection.connect().prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);            
             pstm.executeUpdate();
             ResultSet Keys = pstm.getGeneratedKeys();
             if(Keys.next()){
-                iid=(int)Keys.getLong(1);
+                iid=(int)Keys.getInt(1);
                 System.out.println("El id tipoP: "+iid);
             }
-            conn.Desconectar();
+            connection.disconnect();
         } catch (SQLException e) {
             System.out.println(e);
         }
@@ -56,14 +51,14 @@ public class TipoProducto {
     }
     
     public void UpdateTP(int id){
-        int iid = 0;
+        // int iid = 0;
         String sql = "UPDATE TipoProducto SET nombreTipoProducto='"+ntproducto+"' WHERE idTipoProducto='"+id+"'";
         
         try {
-            PreparedStatement pstm = conn.getConnection().prepareStatement(sql);
+            PreparedStatement pstm = connection.connect().prepareStatement(sql);
             pstm.executeUpdate();
             
-            conn.Desconectar();
+            connection.disconnect();
         } catch (SQLException e) {
             System.out.println("Update name TP");
             System.out.println(e);
@@ -71,9 +66,9 @@ public class TipoProducto {
         
         /*sql = "SELECT nombreTipoProducto FROM TipoProducto WHERE idTipoProducto='"+id+"'";
         try {
-            PreparedStatement pstm = conn.getConnection().prepareStatement(sql);
+            PreparedStatement pstm = connection.connect().prepareStatement(sql);
             pstm.executeUpdate();
-            conn.Desconectar();
+            connection.disconnect();
         } catch (SQLException e) {
             System.out.println(e);
         }*/
@@ -86,7 +81,7 @@ public class TipoProducto {
         String sql="SELECT * FROM TipoProducto";
         Object[][] regs=new Object[count][6];
         try
-        {   PreparedStatement pstm = conn.getConnection().prepareStatement(sql);
+        {   PreparedStatement pstm = connection.connect().prepareStatement(sql);
             ResultSet res=pstm.executeQuery();
             regs[0][0]=0;
             int c=0;
@@ -114,7 +109,7 @@ public class TipoProducto {
         String[] regs = new String[count];
         
         try
-        {   PreparedStatement pstm = conn.getConnection().prepareStatement(sql);
+        {   PreparedStatement pstm = connection.connect().prepareStatement(sql);
             ResultSet res=pstm.executeQuery();
             //regs[0]=0;
             
@@ -125,7 +120,7 @@ public class TipoProducto {
               c++;
             }
             if(desconectar)
-                conn.Desconectar();
+                connection.disconnect();
         }
         catch(SQLException e)
         {   System.out.println(e);
@@ -139,12 +134,12 @@ public class TipoProducto {
         String sql = "SELECT idTipoProducto FROM TipoProducto WHERE nombreTipoProducto='"+nombreTipoProducto+"'";
         
         try {
-            PreparedStatement pstm = conn.getConnection().prepareStatement(sql);
+            PreparedStatement pstm = connection.connect().prepareStatement(sql);
             ResultSet res = pstm.executeQuery();
             if(res.next())
                 idtp = res.getInt(1);
             if (desconectar) {
-                conn.Desconectar();
+                connection.disconnect();
             }
             
         } catch (SQLException e) {
@@ -158,9 +153,9 @@ public class TipoProducto {
     {
         String sql="UPDATE TipoProducto SET stock="+can+" WHERE id='"+id+"'";
         try
-        {   PreparedStatement pstm = conn.getConnection().prepareStatement(sql);
+        {   PreparedStatement pstm = connection.connect().prepareStatement(sql);
             pstm.executeUpdate();
-            conn.Desconectar();
+            connection.disconnect();
         }
         catch(SQLException e)
         {   System.out.println(e);
@@ -173,20 +168,18 @@ public class TipoProducto {
         int count=0;
         String sql2="SELECT COUNT(*) FROM TipoProducto";
         try
-        {   PreparedStatement pstm = conn.getConnection().prepareStatement(sql2);
+        {   PreparedStatement pstm = connection.connect().prepareStatement(sql2);
             ResultSet res=pstm.executeQuery();
             
             if(res.next())
             { count = res.getInt(1);                
             }
             System.out.println("Cantidad de registros TP: "+count);
-            //conn.Desconectar();
+            //connection.disconnect();
         }
         catch(SQLException e)
         {   System.out.println(e);
         }
         return count;
-    }
-    
-    
+    }   
 }

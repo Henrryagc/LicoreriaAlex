@@ -1,11 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package PanelRV;
 
-import Conexion.ConexionMysql;
+import db.Conexion.SqliteConnection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.ResultSet;
@@ -18,28 +14,26 @@ import java.sql.ResultSet;
 public class ProductoVendido {
     
     
-    private int idProducto;
-    private int cantidad;
-    private Double subtotal;
-    private int idRegistroVenta;
+    private final int idProducto;
+    private final int cantidad;
+    private final Double subtotal;
+    private final int idRegistroVenta;
     
-    private ConexionMysql conn;
+    private final SqliteConnection connection = SqliteConnection.getInstance();
+    
     public ProductoVendido(int idProducto, int cantidad, Double subtotal, int idRegistroVenta){
         this.idProducto = idProducto;
         this.cantidad = cantidad;
         this.subtotal = subtotal;
-        this.idRegistroVenta = idRegistroVenta;
-        
-        conn = new ConexionMysql();
+        this.idRegistroVenta = idRegistroVenta;        
     }
     
     public void GuardarProductoVendido(){
-        String sql = "INSERT INTO ProductoVendido VALUES (0,'"+idProducto+"','"+cantidad+"','"+subtotal+"','"+idRegistroVenta+"')";
-        //String sql="INSERT INTO cliente VALUES(0,'"+dni+"','"+email+"','"+apellidos+"','"+nombres+"','"+fechanac+"','"+sexo+"','"+clave+"')";
+        String sql = "INSERT INTO ProductoVendido VALUES (0,'"+idProducto+"','"+cantidad+"','"+subtotal+"','"+idRegistroVenta+"')";        
         try {
-            PreparedStatement pstm = conn.getConnection().prepareStatement(sql);
+            PreparedStatement pstm = connection.connect().prepareStatement(sql);
             pstm.executeUpdate();
-            conn.Desconectar();
+            connection.disconnect();
         } catch (SQLException e) {
             System.out.println("");
             System.out.println("GuardarProductoVendido "+e);
@@ -51,7 +45,7 @@ public class ProductoVendido {
         String sql = "SELECT count(*) FROM RegistroVenta";
         int count = 0;
         try {
-            PreparedStatement pstm = conn.getConnection().prepareStatement(sql);
+            PreparedStatement pstm = connection.connect().prepareStatement(sql);
             ResultSet res = pstm.executeQuery();
             if (res.next()) {
                 count = res.getInt(1);
@@ -66,7 +60,7 @@ public class ProductoVendido {
         sql = "SELECT idRegistroVenta,costoTotal FROM RegistroVenta";
         
         try {
-            PreparedStatement pstm = conn.getConnection().prepareStatement(sql);
+            PreparedStatement pstm = connection.connect().prepareStatement(sql);
             ResultSet res = pstm.executeQuery();
             int c = 0;
             while(res.next()){
